@@ -1,0 +1,41 @@
+{
+	"description": "A simple micro-ORM, based on PDO and data annotations.",
+	"homepage": "https://github.com/cedx/sql.php",
+	"license": "MIT",
+	"name": "cedx/sql",
+	"type": "library",
+	"version": "0.1.0",
+	"authors": [
+		{"email": "cedx@outlook.com", "homepage": "https://cedric-belin.fr", "name": "Cédric Belin"}
+	],
+	"autoload": {
+		"psr-4": {"Belin\\Sql\\": "src/"}
+	},
+	"autoload-dev": {
+		"psr-4": {"Belin\\Sql\\": "test/"}
+	},
+	"config": {
+		"platform-check": false
+	},
+	"keywords": [
+		"data",
+		"database",
+		"mapper",
+		"mapping",
+		"orm",
+		"pdo",
+		"query",
+		"sql"
+	],
+	"require": {
+		"php": ">=8.5.0"
+	},
+	"require-dev": {
+		"phpstan/phpstan": "^2.1.36",
+		"phpunit/phpunit": "^12.5.6"
+	},
+	"support": {
+		"docs": "https://github.com/cedx/sql.php/wiki",
+		"issues": "https://github.com/cedx/sql.php/issues"
+	}
+}
