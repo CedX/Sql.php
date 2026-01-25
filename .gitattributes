@@ -9,7 +9,6 @@
 *.esproj text
 *.html text diff=html
 *.http text
-*.info text
 *.ini text
 *.js text
 *.json text
@@ -35,5 +34,6 @@
 *.jpg binary
 *.pdf binary
 *.png binary
+*.sqlite binary
 *.webp binary
 *.woff2 binary
