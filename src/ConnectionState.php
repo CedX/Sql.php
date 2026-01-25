@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+namespace Belin\Sql;
 
 /**
  * Describes the current state of the connection to a data source.
