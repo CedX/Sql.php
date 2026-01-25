@@ -20,7 +20,7 @@ final class Table {
 	/**
 	 * Creates a new table attribute.
 	 * @param string $name The name of the table the class is mapped to.
-	 * @param string $schema The schema of the table the class is mapped to.
+	 * @param string|null $schema The schema of the table the class is mapped to.
 	 */
 	public function __construct(string $name, ?string $schema = null) {
 		$this->name = $name;
