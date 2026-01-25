@@ -64,8 +64,18 @@ final class Connection {
 	/**
 	 * Releases any resources associated with this object.
 	 */
-	public function __destruct() {
+	public function __destruct(): void {
 		$this->close();
+	}
+
+	/**
+	 * TODO
+	 * @return Transaction
+	 */
+	public function beginTransaction(): Transaction {
+		$transaction = new Transaction($this);
+		$this->pdo->beginTransaction(); // TODO check result
+		return $transaction;
 	}
 
 	/**

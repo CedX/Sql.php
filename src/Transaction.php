@@ -22,7 +22,7 @@ final class Transaction {
 	/**
 	 * Releases any resources associated with this object.
 	 */
-	public function __destruct() {
+	public function __destruct(): void {
 		$this->rollback();
 	}
 
@@ -30,13 +30,13 @@ final class Transaction {
 	 * Commits the database transaction.
 	 */
 	public function commit(): void {
-		$this->connection->pdo->commit();
+		$this->connection->pdo->commit(); // TODO check result
 	}
 
 	/**
 	 * Rolls back the transaction from a pending state.
 	 */
 	public function rollback(): void {
-		$this->connection->pdo->rollBack();
+		$this->connection->pdo->rollBack(); // TODO check result
 	}
 }
