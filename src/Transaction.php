@@ -23,20 +23,22 @@ final class Transaction {
 	 * Releases any resources associated with this object.
 	 */
 	public function __destruct(): void {
-		$this->rollback();
+		try { $this->rollback(); } catch (\Throwable) {}
 	}
 
 	/**
 	 * Commits the database transaction.
+	 * @throws \PDOException An error occurred while committing the transaction.
 	 */
 	public function commit(): void {
-		$this->connection->pdo->commit(); // TODO check result
+		if (!$this->connection->pdo->commit()) throw new \PDOException("An error occurred while committing the transaction.");
 	}
 
 	/**
 	 * Rolls back the transaction from a pending state.
+	 * @throws \PDOException An error occurred while rolling back the transaction.
 	 */
 	public function rollback(): void {
-		$this->connection->pdo->rollBack(); // TODO check result
+		if (!$this->connection->pdo->rollBack()) throw new \PDOException("An error occurred while rolling back the transaction.");
 	}
 }

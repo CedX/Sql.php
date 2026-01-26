@@ -7,21 +7,13 @@ namespace Belin\Sql;
 final class Connection {
 
 	/**
-	 * The default connection options.
-	 */
-	public const array DefaultOptions = [
-		\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-		\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-		\PDO::ATTR_STRINGIFY_FETCHES => false
-	];
-
-	/**
 	 * The string used to open a database.
 	 */
 	public readonly string $connectionString;
 
 	/**
 	 * The underlying PDO connection.
+	 * @internal
 	 */
 	public private(set) ?\PDO $pdo = null;
 
@@ -35,7 +27,7 @@ final class Connection {
 	/**
 	 * The database provider specific options.
 	 */
-	private readonly ?array $options;
+	private readonly array $options;
 
 	/**
 	 * The password for the database user.
@@ -54,9 +46,12 @@ final class Connection {
 	 * @param string|null $password The password for the database user.
 	 * @param array<int, mixed>|null $options The database provider specific options.
 	 */
-	public function __construct(string $connectionString, ?string $userId = null, #[\SensitiveParameter] ?string $password = null, ?array $options = null) {
+	public function __construct(string $connectionString, ?string $userId = null, #[\SensitiveParameter] ?string $password = null, array $options = []) {
+		$options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
+		$options[\PDO::ATTR_STRINGIFY_FETCHES] = false;
+
 		$this->connectionString = $connectionString;
-		$this->options = $options ?: self::DefaultOptions;
+		$this->options = $options;
 		$this->password = $password;
 		$this->userId = $userId;
 	}
@@ -65,23 +60,24 @@ final class Connection {
 	 * Releases any resources associated with this object.
 	 */
 	public function __destruct(): void {
-		$this->close();
+		try { $this->close(); } catch (\Throwable) {}
 	}
 
 	/**
-	 * TODO
-	 * @return Transaction
+	 * Begins a database transaction.
+	 * @return Transaction An object representing the new transaction.
+	 * @throws \PDOException An error occurred while beginning the transaction.
 	 */
 	public function beginTransaction(): Transaction {
-		$transaction = new Transaction($this);
-		$this->pdo->beginTransaction(); // TODO check result
-		return $transaction;
+		if (!$this->pdo->beginTransaction()) throw new \PDOException("An error occurred while beginning the transaction.");
+		return new Transaction($this);
 	}
 
 	/**
 	 * Closes the connection to the database.
 	 */
 	public function close(): void {
+		if ($this->pdo->inTransaction()) $this->pdo->rollBack();
 		$this->pdo = null;
 	}
 
