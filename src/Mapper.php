@@ -56,11 +56,11 @@ final class Mapper {
 
 		$instance = new $className;
 		$table = $this->getTable($className);
-		foreach (array_keys($properties) as $name) {
+		foreach ($properties as $name => $value) {
 			$key = mb_strtolower($name);
 			if (isset($table->columns[$key])) {
 				$column = $table->columns[$key];
-				if ($column->canWrite) $column->setValue($instance, $this->changeType($properties[$name], $column));
+				if ($column->canWrite) $column->setValue($instance, $this->changeType($value, $column));
 			}
 		}
 
