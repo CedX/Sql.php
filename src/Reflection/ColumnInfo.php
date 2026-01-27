@@ -4,7 +4,6 @@ namespace Belin\Sql\Reflection;
 use Belin\Sql\DataAnnotations\Column;
 use Belin\Sql\DataAnnotations\DatabaseGenerated;
 use Belin\Sql\DataAnnotations\DatabaseGeneratedOption;
-use ReflectionProperty;
 
 /**
  * Provides information about a database column.
@@ -47,10 +46,17 @@ final class ColumnInfo {
 	public readonly string $type;
 
 	/**
+	 * The property information providing the column metadata.
+	 */
+	private readonly \ReflectionProperty $property;
+
+	/**
 	 * Creates new column information.
 	 * @param \ReflectionProperty $property The property information providing the column metadata.
 	 */
 	public function __construct(\ReflectionProperty $property) {
+		$this->property = $property;
+
 		$column = array_first($property->getAttributes(Column::class))?->newInstance() ?? new Column($property->name);
 		$this->name = $column->name;
 		$this->canRead = true;
@@ -63,5 +69,23 @@ final class ColumnInfo {
 		$propertyType = $property->getType();
 		$this->isNullable = $propertyType->allowsNull();
 		$this->type = $propertyType->getName();
+	}
+
+	/**
+	 * Gets the property value of a specified object.
+	 * @param object $instance The object whose property value will be returned.
+	 * @return mixed The property value of the specified object.
+	 */
+	public function getValue(object $instance): mixed {
+		return $this->property->getValue($instance);
+	}
+
+	/**
+	 * Sets the property value of a specified object.
+	 * @param object $instance The object whose property value will be set.
+	 * @param mixed $value The new property value.
+	 */
+	public function setValue(object $instance, mixed $value): void {
+		$this->property->setValue($instance, $value);
 	}
 }
