@@ -44,7 +44,7 @@ final class TableInfo {
 			|> (fn($list) => array_combine(array_map(mb_strtolower(...), array_column($list, "name")), $list));
 
 		$identityColumns = array_filter($this->columns, fn($column) => $column->isIdentity);
-		if (count($identityColumns) == 1) $this->identityColumn = $identityColumns[0];
+		if (count($identityColumns) == 1) $this->identityColumn = array_first($identityColumns);
 		else if (isset($this->columns["id"])) $this->identityColumn = $this->columns["id"];
 	}
 
