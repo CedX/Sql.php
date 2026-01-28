@@ -43,7 +43,7 @@ final class ColumnInfo {
 	/**
 	 * The type of the column value.
 	 */
-	public readonly string $type;
+	public readonly \ReflectionType $type;
 
 	/**
 	 * The property information providing the column metadata.
@@ -55,20 +55,18 @@ final class ColumnInfo {
 	 * @param \ReflectionProperty $property The property information providing the column metadata.
 	 */
 	public function __construct(\ReflectionProperty $property) {
-		$this->property = $property;
-
 		$column = array_first($property->getAttributes(Column::class))?->newInstance() ?? new Column($property->name);
-		$this->name = $column->name;
+		$databaseGenerated = array_first($property->getAttributes(DatabaseGenerated::class))?->newInstance() ?? new DatabaseGenerated(DatabaseGeneratedOption::None);
+		$type = $property->getType();
+
 		$this->canRead = true;
 		$this->canWrite = !$property->isReadOnly();
-
-		$databaseGenerated = array_first($property->getAttributes(DatabaseGenerated::class))?->newInstance() ?? new DatabaseGenerated(DatabaseGeneratedOption::None);
 		$this->isComputed = $databaseGenerated->databaseGeneratedOption != DatabaseGeneratedOption::None;
 		$this->isIdentity = $databaseGenerated->databaseGeneratedOption == DatabaseGeneratedOption::Identity;
-
-		$propertyType = $property->getType();
-		$this->isNullable = $propertyType->allowsNull();
-		$this->type = $propertyType->getName();
+		$this->isNullable = $type->allowsNull();
+		$this->name = $column->name;
+		$this->property = $property;
+		$this->type = $type;
 	}
 
 	/**
