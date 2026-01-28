@@ -41,7 +41,11 @@ final class Mapper {
 	 * @internal
 	 */
 	public function changeType(mixed $value, ColumnInfo $column): mixed {
-		return "TODO";
+		switch ($column->type) {
+			// TODO
+		}
+
+		return $value;
 	}
 
 	/**
@@ -56,12 +60,9 @@ final class Mapper {
 
 		$instance = new $className;
 		$table = $this->getTable($className);
-		foreach ($properties as $name => $value) {
-			$key = mb_strtolower($name);
-			if (isset($table->columns[$key])) {
-				$column = $table->columns[$key];
-				if ($column->canWrite) $column->setValue($instance, $this->changeType($value, $column));
-			}
+		foreach ($properties as $name => $value) if (isset($table->columns[$name])) {
+			$column = $table->columns[$name];
+			if ($column->canWrite) $column->setValue($instance, $this->changeType($value, $column));
 		}
 
 		return $instance;

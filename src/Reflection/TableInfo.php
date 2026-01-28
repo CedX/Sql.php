@@ -41,7 +41,7 @@ final class TableInfo {
 		$this->columns = $type->getProperties()
 			|> (fn($list) => array_filter($list, self::isColumn(...)))
 			|> (fn($list) => array_map(fn($item) => new ColumnInfo($item), $list))
-			|> (fn($list) => array_combine(array_map(mb_strtolower(...), array_column($list, "name")), $list));
+			|> (fn($list) => array_combine(array_column($list, "name"), $list));
 
 		$identityColumns = array_filter($this->columns, fn($column) => $column->isIdentity);
 		if (count($identityColumns) == 1) $this->identityColumn = array_first($identityColumns);
