@@ -30,6 +30,11 @@ final class TableInfo {
 	public readonly ?string $schema;
 
 	/**
+	 * The entity type associated with this table.
+	 */
+	public readonly \ReflectionClass $type;
+
+	/**
 	 * Creates new table information.
 	 * @param \ReflectionClass $type The type information providing the table metadata.
 	 */
@@ -37,6 +42,7 @@ final class TableInfo {
 		$table = array_first($type->getAttributes(Table::class))?->newInstance() ?? new Table($type->getShortName());
 		$this->name = $table->name;
 		$this->schema = $table->schema;
+		$this->type = $type;
 
 		$this->columns = $type->getProperties()
 			|> (fn($list) => array_filter($list, self::isColumn(...)))

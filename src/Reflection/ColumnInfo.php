@@ -43,7 +43,7 @@ final class ColumnInfo {
 	/**
 	 * The type of the column value.
 	 */
-	public readonly \ReflectionType $type;
+	public readonly \ReflectionNamedType $type;
 
 	/**
 	 * The property information providing the column metadata.
@@ -53,11 +53,14 @@ final class ColumnInfo {
 	/**
 	 * Creates new column information.
 	 * @param \ReflectionProperty $property The property information providing the column metadata.
+	 * @throws \InvalidArgumentException Intersection and union types are not supported.
 	 */
 	public function __construct(\ReflectionProperty $property) {
+		$type = $property->getType();
+		if (!$type instanceof \ReflectionNamedType) throw new \InvalidArgumentException("Intersection and union types are not supported.");
+
 		$column = array_first($property->getAttributes(Column::class))?->newInstance() ?? new Column($property->name);
 		$databaseGenerated = array_first($property->getAttributes(DatabaseGenerated::class))?->newInstance() ?? new DatabaseGenerated(DatabaseGeneratedOption::None);
-		$type = $property->getType();
 
 		$this->canRead = true;
 		$this->canWrite = !$property->isReadOnly();

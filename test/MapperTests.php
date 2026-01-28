@@ -31,17 +31,17 @@ final class MapperTests extends TestCase {
 	public function createInstance(): void {
 		$mapper = Mapper::instance();
 		$properties = [
-			"Class" => "Bard/minstrel",
-			"FirstName" => "Cédric",
-			"Gender" => CharacterGender::Balrog->name,
-			"LastName" => "Belin"
+			"class" => "Bard/minstrel",
+			"firstName" => "Cédric",
+			"gender" => CharacterGender::Balrog->name,
+			"lastName" => null
 		];
 
 		$instance = $mapper->createInstance($properties);
-		assertEquals("Bard/minstrel", $instance->{"Class"});
-		assertEquals("Cédric", $instance->FirstName);
-		assertEquals(CharacterGender::Balrog->name, $instance->Gender);
-		assertNull($instance->LastName);
+		assertEquals("Bard/minstrel", $instance->{"class"});
+		assertEquals("Cédric", $instance->firstName);
+		assertEquals(CharacterGender::Balrog->name, $instance->gender);
+		assertNull($instance->lastName);
 
 		$character = $mapper->createInstance($properties, Character::class);
 		assertEquals("Cédric", $character->firstName);

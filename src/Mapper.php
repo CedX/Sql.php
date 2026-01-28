@@ -10,11 +10,6 @@ use Belin\Sql\Reflection\TableInfo;
 final class Mapper {
 
 	/**
-	 * The singleton instance of the data mapper.
-	 */
-	private static self $instance = new self;
-
-	/**
 	 * The mapping between the entity types and their associated database tables.
 	 * @var array<string, TableInfo>
 	 */
@@ -30,7 +25,8 @@ final class Mapper {
 	 * @return self The singleton instance of the data mapper.
 	 */
 	public static function instance(): self {
-		return self::$instance;
+		static $instance = new self;
+		return $instance;
 	}
 
 	/**
@@ -41,8 +37,12 @@ final class Mapper {
 	 * @internal
 	 */
 	public function changeType(mixed $value, ColumnInfo $column): mixed {
-		switch ($column->type) {
-			// TODO
+		if ($column->type->isBuiltin()) {
+			if ($value === null && $column->isNullable) return null;
+
+			$clone = $value;
+			settype($clone, $column->type->getName());
+			return $clone;
 		}
 
 		return $value;
@@ -52,14 +52,14 @@ final class Mapper {
 	 * Creates a new object of a given type from the specified dictionary.
 	 * @template T The object type.
 	 * @param array<string, mixed> $properties A dictionary providing the properties to be set on the created object.
-	 * @param class-string<T> $className The type to create.
+	 * @param class-string<T> $class The type to create.
 	 * @return T The newly created object.
 	 */
-	public function createInstance(array $properties, string $className = \stdClass::class): object {
-		if ($className == \stdClass::class) return (object) $properties;
+	public function createInstance(array $properties, string $class = \stdClass::class): object {
+		if ($class == \stdClass::class) return (object) $properties;
 
-		$instance = new $className;
-		$table = $this->getTable($className);
+		$table = $this->getTable($class);
+		$instance = $table->type->newInstance();
 		foreach ($properties as $name => $value) if (isset($table->columns[$name])) {
 			$column = $table->columns[$name];
 			if ($column->canWrite) $column->setValue($instance, $this->changeType($value, $column));
