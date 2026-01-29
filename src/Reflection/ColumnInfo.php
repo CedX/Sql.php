@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 namespace Belin\Sql\Reflection;
 
-use Belin\Sql\DataAnnotations\Column;
-use Belin\Sql\DataAnnotations\DatabaseGenerated;
-use Belin\Sql\DataAnnotations\DatabaseGeneratedOption;
+use Belin\Sql\DataAnnotations\{Column, DatabaseGenerated, DatabaseGeneratedOption};
 
 /**
  * Provides information about a database column.
@@ -33,7 +31,7 @@ final class ColumnInfo {
 	/**
 	 * Value indicating whether the column value is nullable.
 	 */
-	public readonly bool $isNullable;
+	public bool $isNullable { get => $this->type->allowsNull(); }
 
 	/**
 	 * The column name.
@@ -62,11 +60,10 @@ final class ColumnInfo {
 		$column = array_first($property->getAttributes(Column::class))?->newInstance() ?? new Column($property->name);
 		$databaseGenerated = array_first($property->getAttributes(DatabaseGenerated::class))?->newInstance() ?? new DatabaseGenerated(DatabaseGeneratedOption::None);
 
-		$this->canRead = true;
+		$this->canRead = true; // TODO check hasHook(set)?
 		$this->canWrite = !$property->isReadOnly();
 		$this->isComputed = $databaseGenerated->databaseGeneratedOption != DatabaseGeneratedOption::None;
 		$this->isIdentity = $databaseGenerated->databaseGeneratedOption == DatabaseGeneratedOption::Identity;
-		$this->isNullable = $type->allowsNull();
 		$this->name = $column->name;
 		$this->property = $property;
 		$this->type = $type;

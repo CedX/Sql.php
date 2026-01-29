@@ -11,9 +11,7 @@ final class Character {
 	/**
 	 * TODO
 	 */
-	public string $titi {
-		get => "titi";
-	}
+	public string $titi { get => "titi"; }
 
 	/**
 	 * TODO

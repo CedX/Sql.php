@@ -20,9 +20,7 @@ final class Connection {
 	/**
 	 * The current state of this connection.
 	 */
-	public ConnectionState $state {
-		get => $this->pdo ? ConnectionState::Open : ConnectionState::Closed;
-	}
+	public ConnectionState $state { get => $this->pdo ? ConnectionState::Open : ConnectionState::Closed; }
 
 	/**
 	 * The database provider specific options.
