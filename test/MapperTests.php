@@ -14,15 +14,15 @@ final class MapperTests extends TestCase {
 
 	/**
 	 * The test data used by the `changeType()` method.
-	 * @return array
+	 * @return array<TODO>
 	 */
-	// public static function testData(): array {
+	// public static function changeTypeData(): array {
 	// 	return [
 	// 		// TODO
 	// 	];
 	// }
 
-	// #[Test, TestDox("changeType()"), DataProvider("testData")]
+	// #[Test, TestDox("changeType()"), DataProvider("changeTypeData")]
 	// public function changeType(): void {
 	// 	// TODO
 	// }

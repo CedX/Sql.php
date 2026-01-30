@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Belin\Sql;
 
-use Belin\Sql\Reflection\ColumnInfo;
-use Belin\Sql\Reflection\TableInfo;
+use Belin\Sql\Reflection\{ColumnInfo, TableInfo};
 
 /**
  * Maps data records to entity objects.
@@ -34,15 +33,26 @@ final class Mapper {
 	 * @param mixed $value The object to convert.
 	 * @param ColumnInfo $column The column providing the type of object to return.
 	 * @return mixed The value of the given type corresponding to the specified object.
+	 * @throws \UnexpectedValueException TODO
 	 * @internal
 	 */
 	public function changeType(mixed $value, ColumnInfo $column): mixed {
-		if ($column->type->isBuiltin()) {
-			if ($value === null && $column->isNullable) return null;
+		if ($value === null && $column->isNullable) return null;
 
-			$clone = $value;
-			settype($clone, $column->type->getName());
-			return $clone;
+		switch ($column->type) {
+			case "bool":
+				if (is_string($value)) {
+					$exception = new \UnexpectedValueException("String '$value' was not recognized as a valid boolean.");
+					$stringValue = mb_strtolower($value);
+					return $stringValue == "false" ? false : ($stringValue == "true" ? true : throw $exception);
+				}
+
+				return (bool) $value;
+
+			case "float": return (float) $value;
+			case "int": return (int) $value;
+			case "string": return (string) $value;
+			default: throw new \UnexpectedValueException("TODO");
 		}
 
 		return $value;
