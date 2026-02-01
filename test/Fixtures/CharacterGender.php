@@ -4,12 +4,12 @@ namespace Belin\Sql\Fixtures;
 /**
  * Defines the gender of a character.
  */
-enum CharacterGender {
-	case Balrog;
-	case DarkLord;
-	case Dwarf;
-	case Elf;
-	case Hobbit;
-	case Human;
-	case Istari;
+enum CharacterGender: string {
+	case Balrog = "Balrog";
+	case DarkLord = "DarkLord";
+	case Dwarf = "Dwarf";
+	case Elf = "Elf";
+	case Hobbit = "Hobbit";
+	case Human = "Human";
+	case Istari = "Istari";
 }
