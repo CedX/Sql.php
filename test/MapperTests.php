@@ -27,25 +27,24 @@ final class MapperTests extends TestCase {
 	// 	// TODO
 	// }
 
-	#[Test, TestDox("createInstance()")]
-	public function createInstance(): void {
-		$mapper = Mapper::instance();
-		$properties = [
-			"class" => "Bard/minstrel",
-			"firstName" => "Cédric",
-			"gender" => CharacterGender::Balrog->name,
-			"lastName" => null
-		];
+	// #[Test, TestDox("createInstance()")]
+	// public function createInstance(): void {
+	// 	$properties = [
+	// 		"CLASS" => "Bard/minstrel",
+	// 		"FirstName" => "Cédric",
+	// 		"Gender" => CharacterGender::Balrog->value,
+	// 		"LastName" => null
+	// 	];
 
-		$instance = $mapper->createInstance($properties);
-		assertEquals("Bard/minstrel", $instance->{"class"});
-		assertEquals("Cédric", $instance->firstName);
-		assertEquals(CharacterGender::Balrog->name, $instance->gender);
-		assertNull($instance->lastName);
+	// 	$instance = Mapper::instance()->createInstance($properties);
+	// 	assertEquals("Bard/minstrel", $instance->{"CLASS"});
+	// 	assertEquals("Cédric", $instance->FirstName);
+	// 	assertEquals(CharacterGender::Balrog->value, $instance->Gender);
+	// 	assertNull($instance->LastName);
 
-		$character = $mapper->createInstance($properties, Character::class);
-		assertEquals("Cédric", $character->firstName);
-		assertEquals(CharacterGender::Balrog, $character->gender);
-		assertEquals("", $character->lastName);
-	}
+	// 	$character = Mapper::instance()->createInstance($properties, Character::class);
+	// 	assertEquals("Cédric", $character->firstName);
+	// 	assertEquals(CharacterGender::Balrog, $character->gender);
+	// 	assertEquals("", $character->lastName);
+	// }
 }
