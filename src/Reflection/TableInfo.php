@@ -39,6 +39,7 @@ final class TableInfo {
 	 * @param \ReflectionClass $type The type information providing the table metadata.
 	 */
 	public function __construct(\ReflectionClass $type) {
+		/** @var Table $table */
 		$table = array_first($type->getAttributes(Table::class))?->newInstance() ?? new Table($type->getShortName());
 		$this->name = $table->name;
 		$this->schema = $table->schema;
@@ -46,7 +47,7 @@ final class TableInfo {
 
 		$this->columns = $type->getProperties()
 			|> (fn($list) => array_filter($list, self::isColumn(...)))
-			|> (fn($list) => array_map(fn($item) => new ColumnInfo($item), $list))
+			|> (fn($list) => array_map(fn($property) => new ColumnInfo($property), $list))
 			|> (fn($list) => array_combine(array_column($list, "name"), $list));
 
 		$identityColumns = array_filter($this->columns, fn($column) => $column->isIdentity);
@@ -60,6 +61,8 @@ final class TableInfo {
 	 */
 	private static function isColumn(\ReflectionProperty $property): bool {
 		if ($property->isAbstract() || $property->isStatic() || $property->getAttributes(NotMapped::class)) return false;
-		return !$property->isReadOnly() || $property->getAttributes(Column::class);
+		return ($property->hasHook(\PropertyHookType::Get) && $property->hasHook(\PropertyHookType::Set))
+			|| (!$property->hasHooks() && !$property->isReadOnly())
+			|| $property->getAttributes(Column::class);
 	}
 }

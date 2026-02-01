@@ -60,8 +60,8 @@ final class ColumnInfo {
 		$column = array_first($property->getAttributes(Column::class))?->newInstance() ?? new Column($property->name);
 		$databaseGenerated = array_first($property->getAttributes(DatabaseGenerated::class))?->newInstance() ?? new DatabaseGenerated(DatabaseGeneratedOption::None);
 
-		$this->canRead = true; // TODO check hasHook(set)?
-		$this->canWrite = !$property->isReadOnly();
+		$this->canRead = $property->hasHook(\PropertyHookType::Get) || !$property->hasHooks();
+		$this->canWrite = $property->hasHook(\PropertyHookType::Set) || (!$property->hasHooks() && !$property->isReadOnly());
 		$this->isComputed = $databaseGenerated->databaseGeneratedOption != DatabaseGeneratedOption::None;
 		$this->isIdentity = $databaseGenerated->databaseGeneratedOption == DatabaseGeneratedOption::Identity;
 		$this->name = $column->name;
