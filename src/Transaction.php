@@ -31,7 +31,7 @@ final class Transaction {
 	 * @throws \PDOException An error occurred while committing the transaction.
 	 */
 	public function commit(): void {
-		if (!$this->connection->pdo->commit()) throw new \PDOException("An error occurred while committing the transaction.");
+		if (!$this->connection->pdo?->commit()) throw new \PDOException("An error occurred while committing the transaction.");
 	}
 
 	/**
@@ -39,6 +39,6 @@ final class Transaction {
 	 * @throws \PDOException An error occurred while rolling back the transaction.
 	 */
 	public function rollback(): void {
-		if (!$this->connection->pdo->rollBack()) throw new \PDOException("An error occurred while rolling back the transaction.");
+		if (!$this->connection->pdo?->rollBack()) throw new \PDOException("An error occurred while rolling back the transaction.");
 	}
 }

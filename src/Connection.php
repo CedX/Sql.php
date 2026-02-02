@@ -24,6 +24,7 @@ final class Connection {
 
 	/**
 	 * The database provider specific options.
+	 * @var array<int, mixed>
 	 */
 	private readonly array $options;
 
@@ -42,9 +43,10 @@ final class Connection {
 	 * @param string $connectionString The string used to open a database.
 	 * @param string|null $userId The identifier for the database user.
 	 * @param string|null $password The password for the database user.
-	 * @param array<int, mixed>|null $options The database provider specific options.
+	 * @param array<int, mixed> $options The database provider specific options.
 	 */
 	public function __construct(string $connectionString, ?string $userId = null, #[\SensitiveParameter] ?string $password = null, array $options = []) {
+		$options[\PDO::ATTR_CASE] = \PDO::CASE_NATURAL;
 		$options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
 		$options[\PDO::ATTR_STRINGIFY_FETCHES] = false;
 
@@ -67,7 +69,7 @@ final class Connection {
 	 * @throws \PDOException An error occurred while beginning the transaction.
 	 */
 	public function beginTransaction(): Transaction {
-		if (!$this->pdo->beginTransaction()) throw new \PDOException("An error occurred while beginning the transaction.");
+		if (!$this->pdo?->beginTransaction()) throw new \PDOException("An error occurred while beginning the transaction.");
 		return new Transaction($this);
 	}
 
@@ -75,7 +77,7 @@ final class Connection {
 	 * Closes the connection to the database.
 	 */
 	public function close(): void {
-		if ($this->pdo->inTransaction()) $this->pdo->rollBack();
+		if ($this->pdo?->inTransaction()) $this->pdo->rollBack();
 		$this->pdo = null;
 	}
 

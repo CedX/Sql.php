@@ -15,40 +15,40 @@ final class Parameter {
 	/**
 	 * The database type of this parameter.
 	 */
-	public DbType $dbType = DbType::String;
+	public ?DbType $dbType;
 
 	/**
-	 * Value indicating whether the parameter is input-only or bidirectional.
+	 * Value indicating whether this parameter is input-only, output-only, bidirectional, or a stored procedure return value parameter.
 	 */
-	public ParameterDirection $direction = ParameterDirection::Input;
+	public ?ParameterDirection $direction;
+
+	/**
+	 * The parameter name.
+	 */
+	public string $name { set => self::normalizeName($value); }
+
+	/**
+	 * The parameter value.
+	 */
+	public mixed $value;
 
 	/**
 	 * Creates a new parameter.
+	 * @param string $name The parameter name.
+	 * @param mixed $value The parameter value.
 	 */
-	public function __construct() {
-		// TODO
+	public function __construct(string $name, mixed $value = null) {
+		$this->name = $name;
+		$this->value = $value;
 	}
 
 	/**
-	 * Releases any resources associated with this object.
+	 * Normalizes the specified parameter name.
+	 * @param string $name The parameter name.
+	 * @return string The normalized parameter name.
+	 * @internal
 	 */
-	public function __destruct(): void {
-		try { $this->rollback(); } catch (\Throwable) {}
-	}
-
-	/**
-	 * Commits the database transaction.
-	 * @throws \PDOException An error occurred while committing the transaction.
-	 */
-	public function commit(): void {
-		if (!$this->connection->pdo->commit()) throw new \PDOException("An error occurred while committing the transaction.");
-	}
-
-	/**
-	 * Rolls back the transaction from a pending state.
-	 * @throws \PDOException An error occurred while rolling back the transaction.
-	 */
-	public function rollback(): void {
-		if (!$this->connection->pdo->rollBack()) throw new \PDOException("An error occurred while rolling back the transaction.");
+	public static function normalizeName(string $name): string {
+		return mb_strlen($name) == 0 ? "?" : (in_array($name[0], self::$prefixes) ? $name : "@$name");
 	}
 }

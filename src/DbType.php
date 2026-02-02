@@ -27,7 +27,12 @@ enum DbType: int {
 	case Integer = \PDO::PARAM_INT;
 
 	/**
+	 * A stream of characters, without a predefined character set.
+	 */
+	case String = \PDO::PARAM_STR;
+
+	/**
 	 * A stream of Unicode characters.
 	 */
-	case String = \PDO::PARAM_STR | \PDO::PARAM_STR_NATL;
+	case UnicodeString = \PDO::PARAM_STR | \PDO::PARAM_STR_NATL;
 }

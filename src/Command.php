@@ -20,7 +20,7 @@ final class Command {
 	/**
 	 * Creates a new command.
 	 * @param string $text The text of the SQL statement.
-	 * @param array $parameters The parameters of the SQL statement.
+	 * @param array<string, mixed> $parameters The parameters of the SQL statement.
 	 */
 	public function __construct(string $text, array $parameters = []) {
 		$this->parameters = $parameters;
