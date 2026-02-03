@@ -47,6 +47,7 @@ final class Connection {
 	 */
 	public function __construct(string $connectionString, ?string $userId = null, #[\SensitiveParameter] ?string $password = null, array $options = []) {
 		$options[\PDO::ATTR_CASE] = \PDO::CASE_NATURAL;
+		$options[\PDO::ATTR_EMULATE_PREPARES] = false;
 		$options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
 		$options[\PDO::ATTR_STRINGIFY_FETCHES] = false;
 
