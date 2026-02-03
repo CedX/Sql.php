@@ -31,12 +31,13 @@ final class TableInfo {
 
 	/**
 	 * The entity type associated with this table.
+	 * @var \ReflectionClass<object>
 	 */
 	public readonly \ReflectionClass $type;
 
 	/**
 	 * Creates new table information.
-	 * @param \ReflectionClass $type The type information providing the table metadata.
+	 * @param \ReflectionClass<object> $type The type information providing the table metadata.
 	 */
 	public function __construct(\ReflectionClass $type) {
 		/** @var Table $table */
@@ -53,11 +54,12 @@ final class TableInfo {
 		$identityColumns = array_filter($this->columns, fn($column) => $column->isIdentity);
 		if (count($identityColumns) == 1) $this->identityColumn = array_first($identityColumns);
 		else if (isset($this->columns["id"])) $this->identityColumn = $this->columns["id"];
+		else $this->identityColumn = null;
 	}
 
 	/**
 	 * Returns a value indicating whether the specified property should be included in database mapping.
-	 * @return `true` if the specified property should be included in database mapping, otherwise `false`.
+	 * @return bool `true` if the specified property should be included in database mapping, otherwise `false`.
 	 */
 	private static function isColumn(\ReflectionProperty $property): bool {
 		if ($property->isAbstract() || $property->isStatic() || $property->getAttributes(NotMapped::class)) return false;

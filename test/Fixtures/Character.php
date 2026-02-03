@@ -37,5 +37,5 @@ final class Character {
 	 * The first name.
 	 */
 	#[Column("LastName")]
-	public ?string $lastName;
+	public string $lastName = "";
 }

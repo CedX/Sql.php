@@ -12,15 +12,15 @@ final class Connection {
 	public readonly string $connectionString;
 
 	/**
+	 * The current state of this connection.
+	 */
+	public ConnectionState $state { get => $this->pdo ? ConnectionState::Open : ConnectionState::Closed; }
+
+	/**
 	 * The underlying PDO connection.
 	 * @internal
 	 */
 	public private(set) ?\PDO $pdo = null;
-
-	/**
-	 * The current state of this connection.
-	 */
-	public ConnectionState $state { get => $this->pdo ? ConnectionState::Open : ConnectionState::Closed; }
 
 	/**
 	 * The database provider specific options.
@@ -75,6 +75,7 @@ final class Connection {
 
 	/**
 	 * Closes the connection to the database.
+	 * @phpstan-assert null $this->pdo
 	 */
 	public function close(): void {
 		if ($this->pdo?->inTransaction()) $this->pdo->rollBack();
@@ -83,6 +84,7 @@ final class Connection {
 
 	/**
 	 * Opens a connection to the database.
+	 * @phpstan-assert \PDO $this->pdo
 	 */
 	public function open(): void {
 		$this->pdo = \PDO::connect($this->connectionString, $this->userId, $this->password, $this->options);

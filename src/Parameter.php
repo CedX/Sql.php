@@ -36,8 +36,12 @@ final class Parameter {
 	 * Creates a new parameter.
 	 * @param string $name The parameter name.
 	 * @param mixed $value The parameter value.
+	 * @param DbType|null $value The parameter database type.
+	 * @param ParameterDirection|null $value The parameter direction.
 	 */
-	public function __construct(string $name, mixed $value = null) {
+	public function __construct(string $name, mixed $value = null, ?DbType $dbType = null, ?ParameterDirection $direction = null) {
+		$this->dbType = $dbType;
+		$this->direction = $direction;
 		$this->name = $name;
 		$this->value = $value;
 	}
