@@ -60,7 +60,7 @@ final class Connection {
 	/**
 	 * Releases any resources associated with this object.
 	 */
-	public function __destruct(): void {
+	public function __destruct() {
 		try { $this->close(); } catch (\Throwable) {}
 	}
 
