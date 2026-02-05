@@ -84,7 +84,7 @@ final class Mapper {
 	 * @return TableInfo The table information associated with the specified type.
 	 */
 	public function getTable(string $className): TableInfo {
-		if (!isset(self::$mapping[$className])) self::$mapping[$className] = new TableInfo(new \ReflectionClass($className));
+		self::$mapping[$className] ??= new TableInfo(new \ReflectionClass($className));
 		return self::$mapping[$className];
 	}
 }
