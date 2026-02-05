@@ -84,6 +84,24 @@ final class Connection {
 	}
 
 	/**
+	 * Executes a parameterized SQL statement.
+	 * @param string $text The SQL query to be executed.
+	 * @param ParameterCollection|null $parameters The parameters of the SQL query.
+	 * @return int The number of rows affected.
+	 * @throws \PDOException An error occurred while executing the query.
+	 */
+	public function execute(string $text, ?ParameterCollection $parameters = null): int {
+		if ($this->state == ConnectionState::Closed) $this->open();
+
+		$statement = $this->pdo->prepare($text);
+		if (!$statement) throw new \PDOException("An error occurred while executing the query.");
+
+		// TODO bind params
+		if (!$statement->execute(/* TODO */)) throw new \PDOException("An error occurred while executing the query.");
+		return $statement->rowCount();
+	}
+
+	/**
 	 * Opens a connection to the database.
 	 * @phpstan-assert \PDO $this->pdo
 	 */
