@@ -47,6 +47,17 @@ final class Parameter {
 	}
 
 	/**
+	 * Creates a new parameter from the specified tuple.
+	 * @param array<int|string, mixed> $tuple The tuple providing the parameter properties.
+	 * @return self The parameter corresponding to the specified tuple.
+	 */
+	public static function of(array $tuple): self {
+		return array_is_list($tuple)
+			? new self($tuple[0] ?? "", $tuple[1] ?? null, $tuple[2] ?? null, $tuple[3] ?? null)
+			: new self($tuple["name"] ?? "", $tuple["value"] ?? null, $tuple["dbType"] ?? null, $tuple["direction"] ?? null);
+	}
+
+	/**
 	 * Normalizes the specified parameter name.
 	 * @param string $name The parameter name.
 	 * @return string The normalized parameter name.
