@@ -21,7 +21,7 @@ final class Command {
 	 * @param string $text The text of the SQL statement.
 	 * @param ParameterCollection|array<int|string, mixed> $parameters The parameters of the SQL statement.
 	 */
-	public function __construct(string $text, array|ParameterCollection $parameters = []) {
+	public function __construct(string $text, ParameterCollection|array $parameters = []) {
 		$this->text = $text;
 		$this->parameters = is_array($parameters) ? ParameterCollection::of($parameters) : $parameters;
 	}
