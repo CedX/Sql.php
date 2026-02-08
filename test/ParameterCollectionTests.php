@@ -3,7 +3,7 @@ namespace Belin\Sql;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\{Test, TestDox};
-use function PHPUnit\Framework\{assertCount, assertEquals, assertFalse, assertInstanceOf, assertTrue};
+use function PHPUnit\Framework\{assertCount, assertEmpty, assertEquals, assertFalse, assertInstanceOf, assertTrue};
 
 /**
  * Tests the features of the {@see ParameterCollection} class.
@@ -14,7 +14,7 @@ final class ParameterCollectionTests extends TestCase {
 	#[Test, TestDox("add()")]
 	public function add(): void {
 		$parameters = new ParameterCollection;
-		assertCount(0, $parameters);
+		assertEmpty($parameters);
 
 		$parameters->add(["?1", 123, DbType::Integer]);
 		assertCount(1, $parameters);
@@ -31,7 +31,7 @@ final class ParameterCollectionTests extends TestCase {
 		$parameters = new ParameterCollection(new Parameter("foo"));
 		assertCount(1, $parameters);
 		$parameters->clear();
-		assertCount(0, $parameters);
+		assertEmpty($parameters);
 	}
 
 	#[Test, TestDox("contains()")]
@@ -64,5 +64,105 @@ final class ParameterCollectionTests extends TestCase {
 		$parameters->add(new Parameter(":baz"));
 		assertEquals(1, $parameters->indexOf("baz"));
 		assertEquals(1, $parameters->indexOf(":baz"));
+	}
+
+	#[Test, TestDox("insert()")]
+	public function insert(): void {
+		$parameters = new ParameterCollection;
+
+		$parameters->insert(0, new Parameter("foo", 123));
+		assertCount(1, $parameters);
+		assertEquals(":foo", $parameters[0]->name);
+
+		$parameters->insert(1, new Parameter("bar", 456));
+		assertCount(2, $parameters);
+		assertEquals(":bar", $parameters[1]->name);
+
+		$parameters->insert(0, new Parameter("baz", 789));
+		assertCount(3, $parameters);
+		assertEquals(":baz", $parameters[0]->name);
+		assertEquals(":foo", $parameters[1]->name);
+		assertEquals(":bar", $parameters[2]->name);
+
+		$this->expectException(\OutOfRangeException::class);
+		$parameters->insert(4, new Parameter("qux"));
+	}
+
+	#[Test, TestDox("offsetExists()")]
+	public function offsetExists(): void {
+		$parameters = new ParameterCollection;
+		assertFalse(isset($parameters[0]));
+		assertFalse(isset($parameters["foo"]));
+		assertFalse(isset($parameters[":foo"]));
+
+		$parameters->add(["foo", 123]);
+		assertTrue(isset($parameters[0]));
+		assertTrue(isset($parameters["foo"]));
+		assertTrue(isset($parameters[":foo"]));
+	}
+
+	#[Test, TestDox("offsetGet()")]
+	public function offsetGet(): void {
+		$parameters = new ParameterCollection(["foo", 123]);
+		assertEquals(":foo", $parameters[0]->name);
+		assertEquals(":foo", $parameters["foo"]->name);
+
+		$this->expectException(\OutOfRangeException::class);
+		$parameters[1]; // @phpstan-ignore expr.resultUnused
+	}
+
+	#[Test, TestDox("offsetSet()")]
+	public function offsetSet(): void {
+		$parameters = new ParameterCollection;
+
+		$parameters[] = ["foo", 123];
+		assertEquals(":foo", $parameters[":foo"]->name);
+		$parameters[0] = new Parameter("bar", 456);
+		assertEquals(":bar", $parameters[0]->name);
+
+		$this->expectException(\OutOfRangeException::class);
+		$parameters[":foo"]; // @phpstan-ignore expr.resultUnused
+	}
+
+	#[Test, TestDox("offsetUnset()")]
+	public function offsetUnset(): void {
+		$parameters = new ParameterCollection(["foo", 123], ["bar", 456]);
+		assertCount(2, $parameters);
+
+		unset($parameters["foo"]);
+		assertCount(1, $parameters);
+		unset($parameters[0]);
+		assertEmpty($parameters);
+
+		$this->expectException(\OutOfRangeException::class);
+		unset($parameters["bar"]);
+	}
+
+	#[Test, TestDox("remove()")]
+	public function remove(): void {
+		$parameter = new Parameter("foo", 123);
+
+		$parameters = new ParameterCollection($parameter);
+		assertTrue($parameters->contains($parameter));
+
+		$parameters->remove(new Parameter("foo", 123));
+		assertTrue($parameters->contains($parameter));
+
+		$parameters->remove($parameter);
+		assertFalse($parameters->contains($parameter));
+	}
+
+	#[Test, TestDox("removeAt()")]
+	public function removeAt(): void {
+		$parameters = new ParameterCollection(["foo", 123], ["bar", 456]);
+		assertCount(2, $parameters);
+
+		$parameters->removeAt("foo");
+		assertCount(1, $parameters);
+		$parameters->removeAt(0);
+		assertEmpty($parameters);
+
+		$this->expectException(\OutOfRangeException::class);
+		$parameters->removeAt("bar");
 	}
 }

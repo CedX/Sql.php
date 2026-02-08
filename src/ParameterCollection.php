@@ -112,9 +112,9 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	}
 
 	/**
-	 * Gets the parameter at the specified index or name.
+	 * Gets the parameter at the specified offset.
 	 * @param int|string $offset The parameter index or name.
-	 * @return Parameter|null The parameter at the specified index or name, or `null` if not found.
+	 * @return Parameter The parameter at the specified offset.
 	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
 	public function offsetGet(mixed $offset): mixed {
@@ -123,7 +123,7 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	}
 
 	/**
-	 * Sets the parameter at the specified index or name.
+	 * Sets the parameter at the specified offset.
 	 * @param int|string|null $offset The parameter index or name.
 	 * @param Parameter|array<int|string, mixed> $parameter The parameter to set.
 	 * @throws \OutOfRangeException The specified offset is invalid.
