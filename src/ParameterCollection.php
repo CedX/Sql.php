@@ -97,7 +97,7 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	 * @throws \OutOfRangeException The specified index is invalid.
 	 */
 	public function insert(int $index, Parameter|array $parameter): void {
-		if (!$this->offsetExists($index)) throw new \OutOfRangeException("The specified index is invalid.");
+		if ($index < 0 || $index > $this->count()) throw new \OutOfRangeException("The specified index is invalid.");
 		array_splice($this->parameters, $index, 0, [is_array($parameter) ? Parameter::of($parameter) : $parameter]);
 	}
 
@@ -143,10 +143,7 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
 	public function offsetUnset(mixed $offset): void {
-		$index = is_int($offset) ? $offset : $this->indexOf($offset);
-		if (!$this->offsetExists($index)) throw new \OutOfRangeException("The specified offset is invalid.");
-		unset($this->parameters[$index]);
-		$this->parameters = array_values($this->parameters);
+		$this->removeAt($offset);
 	}
 
 	/**
@@ -155,7 +152,7 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	 */
 	public function remove(Parameter $parameter): void {
 		$index = $this->indexOf($parameter);
-		if ($index >= 0) $this->offsetUnset($index);
+		if ($index >= 0) $this->removeAt($index);
 	}
 
 	/**
@@ -164,7 +161,10 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
 	public function removeAt(int|string $offset): void {
-		$this->offsetUnset($offset);
+		$index = is_int($offset) ? $offset : $this->indexOf($offset);
+		if (!isset($this->parameters[$index])) throw new \OutOfRangeException("The specified offset is invalid.");
+		unset($this->parameters[$index]);
+		$this->parameters = array_values($this->parameters);
 	}
 
 	/**
@@ -172,7 +172,6 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 	 * @return Parameter[] An array containing the parameters of this collection.
 	 */
 	public function toArray(): array {
-		$parameters = $this->parameters;
-		return $parameters;
+		return $this->parameters;
 	}
 }
