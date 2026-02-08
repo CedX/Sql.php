@@ -31,7 +31,7 @@ final class ColumnInfo {
 	/**
 	 * Value indicating whether the column value is nullable.
 	 */
-	public bool $isNullable { get => $this->type->allowsNull(); }
+	public readonly bool $isNullable;
 
 	/**
 	 * The column name.
@@ -41,7 +41,7 @@ final class ColumnInfo {
 	/**
 	 * The type of the column value.
 	 */
-	public readonly \ReflectionNamedType $type;
+	public readonly string $type;
 
 	/**
 	 * The property information providing the column metadata.
@@ -64,9 +64,10 @@ final class ColumnInfo {
 		$this->canWrite = $property->hasHook(\PropertyHookType::Set) || (!$property->hasHooks() && !$property->isReadOnly());
 		$this->isComputed = $databaseGenerated->databaseGeneratedOption != DatabaseGeneratedOption::None;
 		$this->isIdentity = $databaseGenerated->databaseGeneratedOption == DatabaseGeneratedOption::Identity;
+		$this->isNullable = $type->allowsNull();
 		$this->name = $column->name;
 		$this->property = $property;
-		$this->type = $type;
+		$this->type = $type->getName();
 	}
 
 	/**
