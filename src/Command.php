@@ -19,10 +19,10 @@ final class Command {
 	/**
 	 * Creates a new command.
 	 * @param string $text The text of the SQL statement.
-	 * @param ParameterCollection|null $parameters The parameters of the SQL statement.
+	 * @param ParameterCollection|array<int|string, mixed> $parameters The parameters of the SQL statement.
 	 */
-	public function __construct(string $text, ?ParameterCollection $parameters = null) {
-		$this->parameters = $parameters ?? new ParameterCollection;
+	public function __construct(string $text, array|ParameterCollection $parameters = []) {
 		$this->text = $text;
+		$this->parameters = is_array($parameters) ? ParameterCollection::of($parameters) : $parameters;
 	}
 }
