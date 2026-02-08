@@ -24,11 +24,21 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 
 	/**
 	 * Creates a new parameter collection from the specified parameters.
-	 * @param array<Parameter|array<int|string, mixed>> $parameters The parameters to add to the created collection.
+	 * @param array<int|string, mixed> $parameters The parameters to add to the created collection.
 	 * @return self The parameter collection initialized from the specified parameters.
 	 */
 	public static function of(array $parameters): self {
-		return new self(...$parameters);
+		$collection = new self;
+
+		$index = 0;
+		foreach ($parameters as $offset => $parameter) {
+			$index++;
+			if (is_array($parameter) || $parameter instanceof Parameter) $collection->add($parameter);
+			else if (is_string($offset)) $collection->add(new Parameter($offset, $parameter));
+			else $collection->add(new Parameter("?$index", $parameter));
+		}
+
+		return $collection;
 	}
 
 	/**

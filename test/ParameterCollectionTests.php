@@ -88,6 +88,34 @@ final class ParameterCollectionTests extends TestCase {
 		$parameters->insert(4, new Parameter("qux"));
 	}
 
+	#[Test, TestDox("of()")]
+	public function of(): void {
+		$parameters = ParameterCollection::of([123, 456]);
+		assertCount(2, $parameters);
+		assertEquals("?1", $parameters[0]->name);
+		assertEquals(123, $parameters[0]->value);
+		assertEquals("?2", $parameters[1]->name);
+		assertEquals(456, $parameters[1]->value);
+
+		$parameters = ParameterCollection::of(["foo" => 123, "bar" => 456]);
+		assertCount(2, $parameters);
+		assertEquals(":foo", $parameters[0]->name);
+		assertEquals(123, $parameters[0]->value);
+		assertEquals(":bar", $parameters[1]->name);
+		assertEquals(456, $parameters[1]->value);
+
+		$parameters = ParameterCollection::of([new Parameter("foo", 123), ["bar", 456], "baz" => 789, "qux"]);
+		assertCount(4, $parameters);
+		assertEquals(":foo", $parameters[0]->name);
+		assertEquals(123, $parameters[0]->value);
+		assertEquals(":bar", $parameters[1]->name);
+		assertEquals(456, $parameters[1]->value);
+		assertEquals(":baz", $parameters[2]->name);
+		assertEquals(789, $parameters[2]->value);
+		assertEquals("?4", $parameters[3]->name);
+		assertEquals("qux", $parameters[3]->value);
+	}
+
 	#[Test, TestDox("offsetExists()")]
 	public function offsetExists(): void {
 		$parameters = new ParameterCollection;
