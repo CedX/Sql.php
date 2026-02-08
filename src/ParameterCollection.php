@@ -16,22 +16,51 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 
 	/**
 	 * Creates a new parameter list.
-	 * @param Parameter|Parameter[] ...$parameters The collection whose elements are copied to the parameter list.
+	 * @param Parameter|array<int|string, mixed> ...$parameters The collection whose elements are copied to the parameter list.
 	 */
 	public function __construct(Parameter|array ...$parameters) {
-		foreach ($parameters as $parameter) {
-			if (is_array($parameter)) array_push($this->parameters, ...$parameter);
-			else $this->parameters[] = $parameter;
-		}
+		$this->addRange($parameters);
 	}
 
 	/**
-	 *
-	 * @param array<int, mixed>|array<string, mixed> $parameters
-	 * @return self
+	 * Creates a new parameter collection from the specified parameters.
+	 * @param array<Parameter|array<int|string, mixed>> $parameters The parameters to add to the created collection.
+	 * @return self The parameter collection initialized from the specified parameters.
 	 */
-	public static function ofArray(array $parameters): self {
-		// TODO
+	public static function of(array $parameters): self {
+		return new self(...$parameters);
+	}
+
+	/**
+	 * Adds a parameter to the end of this collection.
+	 * @param Parameter|array<int|string, mixed> $parameter The parameter to add.
+	 */
+	public function add(Parameter|array $parameter): void {
+		$this->parameters[] = is_array($parameter) ? Parameter::of($parameter) : $parameter;
+	}
+
+	/**
+	 * Adds the parameters of the specified collection to the end of this collection.
+	 * @param iterable<Parameter|array<int|string, mixed>> $parameters The parameters to add.
+	 */
+	public function addRange(iterable $parameters): void {
+		foreach ($parameters as $parameter) $this->add($parameter);
+	}
+
+	/**
+	 * Removes all parameters from this collection.
+	 */
+	public function clear(): void {
+		$this->parameters = array();
+	}
+
+	/**
+	 * Gets a value indicating whether this collection contains the specified parameter.
+	 * @param Parameter|string $parameter The parameter to locate.
+	 * @return bool `true` if the parameter is found, otherwise `false`.
+	 */
+	public function contains(Parameter|string $parameter): bool {
+		return $this->indexOf($parameter) >= 0;
 	}
 
 	/**
@@ -52,51 +81,98 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 
 	/**
 	 * Returns the index of the parameter with the specified name.
-	 * @param string $name The parameter name.
-	 * @return int The index of the parameter with the specified name, or `-1` if not found.
+	 * @param string $parameter The parameter to locate.
+	 * @return int The index of the parameter, or `-1` if not found.
 	 */
-	public function indexOf(string $name): int {
-		$normalizedName = Parameter::normalizeName($name);
-		$index = array_find_key($this->parameters, fn($parameter) => $parameter->name == $normalizedName);
-		return $index === null ? -1 : (int) $index;
+	public function indexOf(Parameter|string $parameter): int {
+		if (!is_string($parameter)) return (int) (array_find_key($this->parameters, fn($value) => $value === $parameter) ?? -1);
+		$normalizedName = Parameter::normalizeName($parameter);
+		return (int) (array_find_key($this->parameters, fn($value) => $value->name == $normalizedName) ?? -1);
+	}
+
+	/**
+	 * Inserts a parameter into this collection at the specified index.
+	 * @param int $index The zero-based index at which the parameter should be inserted.
+	 * @param Parameter|array<int|string, mixed> $parameter The parameter to insert.
+	 * @throws \OutOfRangeException The specified index is invalid.
+	 */
+	public function insert(int $index, Parameter|array $parameter): void {
+		if (!$this->offsetExists($index)) throw new \OutOfRangeException("The specified index is invalid.");
+		array_splice($this->parameters, $index, 0, [is_array($parameter) ? Parameter::of($parameter) : $parameter]);
 	}
 
 	/**
 	 * Gets a value indicating whether a parameter in this collection has the specified index or name.
-	 * @param int|string $index The parameter index or name.
+	 * @param int|string $offset The parameter index or name.
 	 * @return bool `true` if a parameter has the specified index or name, otherwise `false`.
 	 */
-	public function offsetExists(mixed $index): bool {
-		if (is_string($index)) $index = $this->indexOf($index);
+	public function offsetExists(mixed $offset): bool {
+		$index = is_int($offset) ? $offset : $this->indexOf($offset);
 		return isset($this->parameters[$index]);
 	}
 
 	/**
 	 * Gets the parameter at the specified index or name.
-	 * @param int|string $index The parameter index or name.
+	 * @param int|string $offset The parameter index or name.
 	 * @return Parameter|null The parameter at the specified index or name, or `null` if not found.
+	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
-	public function offsetGet(mixed $index): mixed {
-		if (is_string($index)) $index = $this->indexOf($index);
-		return $this->parameters[$index] ?? null;
+	public function offsetGet(mixed $offset): mixed {
+		$index = is_int($offset) ? $offset : $this->indexOf($offset);
+		return $this->parameters[$index] ?? throw new \OutOfRangeException("The specified offset is invalid.");
 	}
 
 	/**
 	 * Sets the parameter at the specified index or name.
-	 * @param int|string $index The parameter index or name.
-	 * @param Parameter $parameter The parameter to set.
+	 * @param int|string|null $offset The parameter index or name.
+	 * @param Parameter|array<int|string, mixed> $parameter The parameter to set.
+	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
-	public function offsetSet(mixed $index, mixed $parameter): void {
-		if (is_string($index)) $index = $this->indexOf($index);
-		$this->parameters[$index] = $parameter;
+	public function offsetSet(mixed $offset, mixed $parameter): void {
+		$index = is_int($offset)
+			? ($offset >= 0 && $offset < $this->count() ? $offset : throw new \OutOfRangeException("The specified offset is invalid."))
+			: ($offset === null ? -1 : $this->indexOf($offset));
+
+		if ($index < 0) $this->add($parameter);
+		else $this->parameters[$index] = is_array($parameter) ? Parameter::of($parameter) : $parameter;
 	}
 
 	/**
 	 * Removes a parameter from this collection.
-	 * @param int|string $index The parameter index or name.
+	 * @param int|string $offset The parameter index or name.
+	 * @throws \OutOfRangeException The specified offset is invalid.
 	 */
-	public function offsetUnset(mixed $index): void {
-		if (is_string($index)) $index = $this->indexOf($index);
+	public function offsetUnset(mixed $offset): void {
+		$index = is_int($offset) ? $offset : $this->indexOf($offset);
+		if (!$this->offsetExists($index)) throw new \OutOfRangeException("The specified offset is invalid.");
 		unset($this->parameters[$index]);
+		$this->parameters = array_values($this->parameters);
+	}
+
+	/**
+	 * Removes the first occurrence of the specified parameter from this collection.
+	 * @param Parameter $parameter The parameter to remove.
+	 */
+	public function remove(Parameter $parameter): void {
+		$index = $this->indexOf($parameter);
+		if ($index >= 0) $this->offsetUnset($index);
+	}
+
+	/**
+	 * Removes a parameter from this collection.
+	 * @param int|string $offset The parameter index or name.
+	 * @throws \OutOfRangeException The specified offset is invalid.
+	 */
+	public function removeAt(int|string $offset): void {
+		$this->offsetUnset($offset);
+	}
+
+	/**
+	 * Copies the parameters of this collection to a new array.
+	 * @return Parameter[] An array containing the parameters of this collection.
+	 */
+	public function toArray(): array {
+		$parameters = $this->parameters;
+		return $parameters;
 	}
 }

@@ -93,7 +93,7 @@ final class Connection {
 	public function execute(string $text, ?ParameterCollection $parameters = null): int {
 		if ($this->state == ConnectionState::Closed) $this->open();
 
-		$statement = $this->pdo->prepare($text);
+		$statement = $this->pdo?->prepare($text);
 		if (!$statement) throw new \PDOException("An error occurred while executing the query.");
 
 		// TODO bind params

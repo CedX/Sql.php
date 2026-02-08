@@ -21,11 +21,14 @@ final class ParameterTests extends TestCase {
 		assertEquals($expected, new Parameter($name)->name);
 	}
 
+	/**
+	 * @param mixed[] $tuple The test data.
+	 */
 	#[Test, TestDox("of()")]
-	#[TestWith(["?1", 123, DbType::Integer])]
-	#[TestWith(["name" => "?1", "value" => 123, "dbType" => DbType::Integer])]
-	public function of(string $name, mixed $value, ?DbType $dbType): void {
-		$parameter = Parameter::of([$name, $value, $dbType]);
+	#[TestWith([["?1", 123, DbType::Integer]], "List")]
+	#[TestWith([["name" => "?1", "value" => 123, "dbType" => DbType::Integer]], "Dictionary")]
+	public function of(array $tuple): void {
+		$parameter = Parameter::of($tuple);
 		assertEquals("?1", $parameter->name);
 		assertEquals(123, $parameter->value);
 		assertEquals(DbType::Integer, $parameter->dbType);
