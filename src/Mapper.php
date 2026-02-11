@@ -31,15 +31,17 @@ final class Mapper {
 	/**
 	 * Converts the specified object into an equivalent value of the specified type.
 	 * @param mixed $value The object to convert.
-	 * @param ColumnInfo $column The column providing the type of object to return.
+	 * @param ColumnInfo|string $columnOrType The type, or the column providing the type, of object to return.
+	 * @param bool $isNullable Value indicating whether the specified conversion type is nullable.
 	 * @return mixed The value of the given type corresponding to the specified object.
-	 * @throws \UnexpectedValueException TODO
+	 * @throws \UnexpectedValueException The specified value was not recognized as valid.
 	 * @internal
 	 */
-	public function changeType(mixed $value, ColumnInfo $column): mixed {
-		if ($value === null && $column->isNullable) return null;
+	public function changeType(mixed $value, ColumnInfo|string $columnOrType, bool $isNullable = false): mixed {
+		if ($columnOrType instanceof ColumnInfo) $isNullable = $columnOrType->isNullable;
+		if ($value === null && $isNullable) return null;
 
-		switch ($column->type) {
+		switch (is_string($columnOrType) ? $columnOrType : $columnOrType->type) {
 			case "bool":
 				if (is_string($value)) {
 					$exception = new \UnexpectedValueException("String '$value' was not recognized as a valid boolean.");
