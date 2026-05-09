@@ -15,7 +15,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: none
-          extensions: curl, intl, mbstring, pdo_sqlite, simplexml
+          extensions: curl, intl, mbstring, pdo, pdo_sqlite, simplexml
           php-version: latest
       - name: Install dependencies
         run: ./Invoke.ps1 Install
