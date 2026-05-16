@@ -5,12 +5,12 @@ If you like [SQL](https://en.wikipedia.org/wiki/SQL) but dislike the boilerplate
 > Think of [Dapper](https://www.learndapper.com) and its alternatives, but less advanced/powerful.
 
 ## Documentation
-- [User guide](https://github.com/cedx/sql.php/wiki)
-- [Examples](https://github.com/cedx/sql.php/tree/main/example)
+- [User guide](https://github.com/CedX/Sql.php/wiki)
+- [Examples](https://github.com/CedX/Sql.php/tree/main/example)
 
 ## Development
-- [Git repository](https://github.com/cedx/sql.php)
-- [Submit an issue](https://github.com/cedx/sql.php/issues)
+- [Git repository](https://github.com/CedX/Sql.php)
+- [Submit an issue](https://github.com/CedX/Sql.php/issues)
 
 ## License
-[SQL Mapper for PHP](https://github.com/cedx/sql.php) is distributed under the MIT License.
+[SQL Mapper for PHP](https://github.com/CedX/Sql.php) is distributed under the MIT License.

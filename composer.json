@@ -1,6 +1,6 @@
 {
 	"description": "A simple micro-ORM, based on PDO and data annotations.",
-	"homepage": "https://github.com/cedx/sql.php",
+	"homepage": "https://github.com/CedX/Sql.php",
 	"license": "MIT",
 	"name": "cedx/sql",
 	"type": "library",
@@ -36,7 +36,7 @@
 		"phpunit/phpunit": "^13.1.10"
 	},
 	"support": {
-		"docs": "https://github.com/cedx/sql.php/tree/main/docs",
-		"issues": "https://github.com/cedx/sql.php/issues"
+		"docs": "https://github.com/CedX/Sql.php/tree/main/docs",
+		"issues": "https://github.com/CedX/Sql.php/issues"
 	}
 }
