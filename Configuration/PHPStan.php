@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
 return ["parameters" => [
 	"level" => 8,
-	"paths" => ["src", "test"]
+	"paths" => ["Sources", "Tests"]
 ]];

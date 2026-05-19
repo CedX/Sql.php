@@ -6,7 +6,7 @@ If you like [SQL](https://en.wikipedia.org/wiki/SQL) but dislike the boilerplate
 
 ## Documentation
 - [User guide](https://github.com/CedX/Sql.php/wiki)
-- [Examples](https://github.com/CedX/Sql.php/tree/main/example)
+- [Examples](https://github.com/CedX/Sql.php/tree/main/Examples)
 
 ## Development
 - [Git repository](https://github.com/CedX/Sql.php)

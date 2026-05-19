@@ -9,11 +9,11 @@
 		{"email": "cedx@outlook.com", "homepage": "https://cedric-belin.fr", "name": "Cédric Belin"}
 	],
 	"autoload": {
-		"files": ["src/Functions.php"],
-		"psr-4": {"Belin\\Sql\\": "src/"}
+		"files": ["Sources/Functions.php"],
+		"psr-4": {"Belin\\Sql\\": "Sources/"}
 	},
 	"autoload-dev": {
-		"psr-4": {"Belin\\Sql\\": "test/"}
+		"psr-4": {"Belin\\Sql\\": "Tests/"}
 	},
 	"config": {
 		"platform-check": false
@@ -36,7 +36,7 @@
 		"phpunit/phpunit": "^13.1.10"
 	},
 	"support": {
-		"docs": "https://github.com/CedX/Sql.php/tree/main/docs",
+		"docs": "https://github.com/CedX/Sql.php/tree/main/Documentation",
 		"issues": "https://github.com/CedX/Sql.php/issues"
 	}
 }
