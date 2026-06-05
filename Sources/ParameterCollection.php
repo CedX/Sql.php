@@ -34,7 +34,7 @@ class ParameterCollection implements \ArrayAccess, \Countable, \IteratorAggregat
 		foreach ($parameters as $offset => $parameter) {
 			$index++;
 			if (is_array($parameter) || $parameter instanceof Parameter) $collection->add($parameter);
-			else if (is_string($offset)) $collection->add(new Parameter($offset, $parameter));
+			elseif (is_string($offset)) $collection->add(new Parameter($offset, $parameter));
 			else $collection->add(new Parameter("?$index", $parameter));
 		}
 

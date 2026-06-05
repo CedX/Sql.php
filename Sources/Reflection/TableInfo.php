@@ -53,7 +53,7 @@ final class TableInfo {
 
 		$identityColumns = array_filter($this->columns, fn($column) => $column->isIdentity);
 		if (count($identityColumns) == 1) $this->identityColumn = array_first($identityColumns);
-		else if (isset($this->columns["id"])) $this->identityColumn = $this->columns["id"];
+		elseif (isset($this->columns["id"])) $this->identityColumn = $this->columns["id"];
 		else $this->identityColumn = null;
 	}
 
