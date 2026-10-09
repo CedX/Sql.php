@@ -10,7 +10,7 @@ use function PHPUnit\Framework\{assertEquals, assertNull};
  * Tests the features of the {@see Mapper} class.
  */
 #[TestDox("Mapper")]
-final class MapperTests extends TestCase {
+class MapperTests extends TestCase {
 
 	/**
 	 * The test data used by the `changeType()` method.

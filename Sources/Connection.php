@@ -4,7 +4,7 @@ namespace Belin\Sql;
 /**
  * Represents an open connection to a data source.
  */
-final class Connection {
+class Connection {
 
 	/**
 	 * The string used to open a database.

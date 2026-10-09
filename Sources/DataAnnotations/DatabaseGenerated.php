@@ -5,7 +5,7 @@ namespace Belin\Sql\DataAnnotations;
  * Specifies how the database generates values for a property.
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-final class DatabaseGenerated {
+class DatabaseGenerated {
 
 	/**
 	 * The pattern used to generate values for the property in the database.

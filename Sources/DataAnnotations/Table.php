@@ -5,7 +5,7 @@ namespace Belin\Sql\DataAnnotations;
  * Specifies the database table that a class is mapped to.
  */
 #[\Attribute(\Attribute::TARGET_CLASS)]
-final class Table {
+class Table {
 
 	/**
 	 * The name of the table the class is mapped to.

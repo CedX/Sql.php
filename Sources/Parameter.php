@@ -4,7 +4,7 @@ namespace Belin\Sql;
 /**
  * Represents a parameter of a parameterized SQL statement.
  */
-final class Parameter {
+class Parameter {
 
 	/**
 	 * The prefixes used for parameter placeholders.

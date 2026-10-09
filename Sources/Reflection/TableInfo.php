@@ -6,7 +6,7 @@ use Belin\Sql\DataAnnotations\{Column, NotMapped, Table};
 /**
  * Provides information about a database table.
  */
-final class TableInfo {
+class TableInfo {
 
 	/**
 	 * The table columns.

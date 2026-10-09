@@ -6,7 +6,7 @@ use Belin\Sql\DataAnnotations\{Column, DatabaseGenerated, DatabaseGeneratedOptio
 /**
  * Provides information about a database column.
  */
-final class ColumnInfo {
+class ColumnInfo {
 
 	/**
 	 * Value indicating whether the column can be read.

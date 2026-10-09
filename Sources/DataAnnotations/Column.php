@@ -5,7 +5,7 @@ namespace Belin\Sql\DataAnnotations;
  * Represents the database column that a property is mapped to.
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-final class Column {
+class Column {
 
 	/**
 	 * The name of the column the property is mapped to.

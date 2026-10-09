@@ -7,7 +7,7 @@ use Belin\Sql\DataAnnotations\{Column, DatabaseGenerated, DatabaseGeneratedOptio
  * Represents a fictional character from a well-known saga.
  */
 #[Table("Characters", schema: "main")]
-final class Character {
+class Character {
 
 	/**
 	 * The first name.

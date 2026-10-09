@@ -4,7 +4,7 @@ namespace Belin\Sql;
 /**
  * Represents a transaction to be performed at a data source.
  */
-final class Transaction {
+class Transaction {
 
 	/**
 	 * The connection associated with this transaction.

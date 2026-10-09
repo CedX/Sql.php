@@ -9,7 +9,7 @@ use function PHPUnit\Framework\{assertCount, assertEmpty, assertEquals, assertFa
  * Tests the features of the {@see ParameterCollection} class.
  */
 #[TestDox("ParameterCollection")]
-final class ParameterCollectionTests extends TestCase {
+class ParameterCollectionTests extends TestCase {
 
 	#[Test, TestDox("add()")]
 	public function add(): void {

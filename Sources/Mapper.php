@@ -6,7 +6,7 @@ use Belin\Sql\Reflection\{ColumnInfo, TableInfo};
 /**
  * Maps data records to entity objects.
  */
-final class Mapper {
+class Mapper {
 
 	/**
 	 * The mapping between the entity types and their associated database tables.

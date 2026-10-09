@@ -9,7 +9,7 @@ use function PHPUnit\Framework\{assertEquals};
  * Tests the features of the {@see Parameter} class.
  */
 #[TestDox("Parameter")]
-final class ParameterTests extends TestCase {
+class ParameterTests extends TestCase {
 
 	#[Test, TestDox("name")]
 	#[TestWith(["", "?"], "Empty string")]

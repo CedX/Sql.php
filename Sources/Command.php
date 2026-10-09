@@ -4,7 +4,7 @@ namespace Belin\Sql;
 /**
  * Represents an SQL statement that is executed while connected to a data source.
  */
-final class Command {
+class Command {
 
 	/**
 	 * The parameters of the SQL statement.
