@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 namespace Belin\Sql;
 
+use Belin\Should\Should;
 use Belin\Sql\Fixtures\{Character, CharacterGender};
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\{Test, TestDox};
-use function PHPUnit\Framework\{assertEquals, assertNull};
 
 /**
  * Tests the features of the {@see Mapper} class.

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Belin\Sql;
 
+use Belin\Should\Should;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\{Test, TestDox};
-use function PHPUnit\Framework\{assertCount, assertEmpty, assertEquals, assertFalse, assertInstanceOf, assertTrue};
 
 /**
  * Tests the features of the {@see ParameterCollection} class.

@@ -32,8 +32,8 @@
 		"php": ">=8.5.0"
 	},
 	"require-dev": {
-		"phpstan/phpstan": "^2.3.5",
-		"phpunit/phpunit": "^13.4.6"
+		"cedx/should": "^2026.11.0",
+		"phpstan/phpstan": "^2.3.5"
 	},
 	"support": {
 		"docs": "https://github.com/CedX/Sql.php/tree/main/Documentation",
